@@ -16,7 +16,7 @@ const myCardsElement = document.getElementsByClassName("my-cards")[0];
 const myMoney = document.getElementById("my-money");
 const inputMoney = document.getElementsByTagName("input")[0];
 
-const botSumsElement = document.getElementsByClassName("bot-sums")[0];
+let botSumsElement = document.getElementsByClassName("bot-sums")[0];
 const botCardsElement = document.getElementsByClassName("bot-cards")[0];
 
 const resultElement = document.getElementById("result");
@@ -73,6 +73,11 @@ startGameButton.addEventListener("click", function () {
     botASCards = 0;
     myASCards = 0;
     isCanHit = true;
+    message = "";
+
+    botSumsElement.textContent = "";
+    mySumsElement.textContent = "";
+    resultElement.textContent = "";
 
     document.getElementById("btn-take").classList.remove("button-disabled");
     document.getElementById("btn-hold").classList.remove("button-disabled");
@@ -91,12 +96,22 @@ startGameButton.addEventListener("click", function () {
     shuffleCards();
   }
 
-  if (bet <= 0 || bet > myMoney) {
+  if (isNaN(myMoney)) {
+    // Mengatasi NaN jika myMoney sebelumnya bukan angka
+    myMoney = 5000;
+    myMoney.textContent = myMoney;
+
+    if (bet <= 0 || bet > myMoney) {
+      alert("Please enter a valid bet amount");
+      return;
+    }
+  }
+
+  if (myMoney <= 0 || bet > myMoney || bet <= 0) {
     alert("Please enter a valid bet amount");
     return;
   }
 
-  myMoney -= bet;
   document.getElementById("my-money").textContent = myMoney;
 
   takeCardButton.disabled = false;
@@ -179,6 +194,14 @@ holdCardsButton.addEventListener("click", function () {
   };
 
   addBotCards();
+});
+
+document.getElementById("reset-money").addEventListener("click", function () {
+  var myMoneyElement = document.getElementById("my-money");
+  var myMoney = parseInt(myMoneyElement.textContent);
+
+  myMoney = 5000;
+  myMoneyElement.textContent = myMoney;
 });
 
 function getValueOfCard(card) {
